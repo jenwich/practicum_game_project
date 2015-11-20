@@ -1,5 +1,4 @@
-import pygame
-import random
+import pygame, random
 
 class Map:
     X_STEP = 40
