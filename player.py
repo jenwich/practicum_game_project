@@ -1,28 +1,39 @@
 import pygame
 
 class Player:
-    def __init__(self, screen, map):
+    def __init__(self, screen, gameMap):
         self.screen = screen
-        self.screen_width = screen.get_width()
-        self.screen_height = screen.get_height()
-        self.map = map
+        self.screenWidth = screen.get_width()
+        self.screenHeight = screen.get_height()
+        self.gameMap = gameMap
+        self.moveDir = 0
+        self.speed = 2
 
     def set(self, x, width, height):
         self.x = x
-        self.y = self.map.get_y(self.x)
+        self.y = self.gameMap.getY(self.x)
         self.width = width
         self.height = height
-        self.rect = pygame.Rect(self.x-self.width/2, self.y-self.height, width, height)
-        
-    def can_move(self, x):
-        return x-self.width/2 > 0 and x+self.width/2 < self.screen_width
+        self.rect = pygame.Rect(self.x - self.width/2, self.y - self.height, width, height)
 
-    def move(self, x):
-        if self.can_move(x):
-            y = self.map.get_y(x)
-            self.rect = self.rect.move(x-self.x, y-self.y)
-            self.x = x
-            self.y = y
+    def canMove(self, x):
+        return x - self.width/2 > 0 and x + self.width/2 < self.screenWidth
+
+    def move(self):
+        x = self.x
+        if self.moveDir == 1:
+            x = x - self.speed
+        elif self.moveDir == 2:
+            x = x + self.speed
+        if self.moveDir != 0:
+            if self.canMove(x):
+                y = self.gameMap.getY(x)
+                self.rect = self.rect.move(x-self.x, y-self.y)
+                self.x = x
+                self.y = y
+
+    def setDir(self, moveDir):
+        self.moveDir = moveDir
 
     def draw(self):
         pygame.draw.rect(self.screen, (225, 0, 0), self.rect)

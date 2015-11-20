@@ -1,22 +1,24 @@
-from map import Map
-from player import Player
 import pygame
+from gamemap import Map
+from player import Player
+
+TITLE = "Let's hunt the little bears!"
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 600
+FPS = 100
+BGCOLOR = (0, 125, 255)
+PLAYER_WIDTH = 20
+PLAYER_HEIGHT = 50
+PLAYER_START_POS = SCREEN_WIDTH / 2
 
 pygame.init()
-
-pygame.display.set_caption("Let's hunt the little bears!")
-width = 1024
-height = 600
-screen = pygame.display.set_mode((width, height))
-
-m = Map(width, height)
-xylist = m.get_xylist()
-running = 1
-player = Player(screen, m)
-player.set(width/2, 20, 50)
-w = width/2
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption(TITLE)
+gameMap = Map(SCREEN_WIDTH, SCREEN_HEIGHT)
+player = Player(screen, gameMap)
+player.set(PLAYER_START_POS, PLAYER_WIDTH, PLAYER_HEIGHT)
 clock = pygame.time.Clock()
-movedi = 0
+running = 1
 
 while running:
     event = pygame.event.poll()
@@ -24,20 +26,16 @@ while running:
         running = 0
     elif event.type == pygame.KEYDOWN:
         if event.key == pygame.K_LEFT:
-            movedi = 1
+            player.setDir(1)
         if event.key == pygame.K_RIGHT:
-            movedi = 2
+            player.setDir(2)
     elif event.type == pygame.KEYUP:
-        movedi = 0
-    if movedi == 1:
-        w = w-1
-    elif movedi == 2:
-        w = w+1
+        player.setDir(0)
 
-    screen.fill((0, 125, 255))
-    m.draw(screen)
-    player.move(w)
+    screen.fill(BGCOLOR)
+    gameMap.draw(screen)
+    player.move()
     player.draw()
     pygame.display.flip()
 
-    clock.tick(150)
+    clock.tick(FPS)
