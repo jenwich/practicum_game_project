@@ -10,6 +10,7 @@ BGCOLOR = (0, 125, 255)
 PLAYER_WIDTH = 20
 PLAYER_HEIGHT = 50
 PLAYER_START_POS = SCREEN_WIDTH / 2
+RELOAD_TIME = 250
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -20,7 +21,7 @@ player.set(PLAYER_START_POS, PLAYER_WIDTH, PLAYER_HEIGHT)
 clock = pygame.time.Clock()
 running = 1
 mouseState = 0
-arrows = []
+mouseTicks = 0
 
 while running:
     for event in pygame.event.get():
@@ -34,12 +35,15 @@ while running:
         elif event.type == pygame.KEYUP:
             player.setDir(0)
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouseState = 1
+            if pygame.time.get_ticks() - mouseTicks >= RELOAD_TIME:
+                mouseState = 1
+                mouseTicks = pygame.time.get_ticks()
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if mouseState == 1:
-                player.setupArrow(event.pos, player.getAngle(event.pos[0], event.pos[1]))
+                dt = pygame.time.get_ticks() - mouseTicks
+                player.setupArrow(dt, player.getAngle(event.pos[0], event.pos[1]))
+                mouseTicks = pygame.time.get_ticks()
                 mouseState = 0
-
     screen.fill(BGCOLOR)
     gameMap.draw(screen)
     player.move()

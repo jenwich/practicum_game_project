@@ -8,12 +8,14 @@ class Arrow:
         self.screenWidth = screen.get_width()
         self.screenHeight = screen.get_height()
         self.gameMap = gameMap
-        self.xi = self.x = x
-        self.yi = self.y = y
-        self.ux = ux
-        self.uy = uy
         self.width = 6
         self.height = 3
+        self.ux = ux
+        self.uy = uy
+        self.xi = self.x = x
+        self.yi = self.y = y
+        if ux > 0:
+            self.xi = self.xi - self.width
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.t = 0
         self.discard = 0

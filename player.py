@@ -53,20 +53,29 @@ class Player:
     def draw(self):
         pygame.draw.rect(self.screen, (225, 0, 0), self.rect)
 
-    def setupArrow(self, pos, angle):
-        u = 10
+    def calculateU(self, t):
+        if t < 200:
+            return 2
+        elif t < 1500:
+            return t / 100
+        else:
+            return 15
+
+    def setupArrow(self, dt, angle):
+        u = self.calculateU(dt)
         ux = u * math.cos(angle)
         uy = u * math.sin(angle)
+        if self.currentDir == 1:
+            startX = self.x - self.width / 2
         if self.currentDir == 2:
+            startX = self.x + self.width / 2
             ux = ux * -1
-        arrow = Arrow(self.screen, self.gameMap, self.x, self.y - self.height/2, ux, uy)
+        arrow = Arrow(self.screen, self.gameMap, startX, self.y - self.height/2, ux, uy)
         self.arrows.append(arrow)
 
     def arrowsExec(self):
         for arrow in self.arrows:
             arrow.move()
-        for arrow in self.arrows:
+            arrow.draw()
             if arrow.isDiscarded():
                 self.arrows.remove(arrow)
-        for arrow in self.arrows:
-            arrow.draw()
