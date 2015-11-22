@@ -1,6 +1,7 @@
-import pygame, math
+import pygame
 from gamemap import Map
 from player import Player
+from bear import *
 
 TITLE = "Let's hunt the little bears!"
 SCREEN_WIDTH = 1024
@@ -11,6 +12,7 @@ PLAYER_WIDTH = 20
 PLAYER_HEIGHT = 50
 PLAYER_START_POS = SCREEN_WIDTH / 2
 RELOAD_TIME = 250
+BEAR_SPAWN_TIME = 2000
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -22,6 +24,7 @@ clock = pygame.time.Clock()
 running = 1
 mouseState = 0
 mouseTicks = 0
+bearTicks = 0
 
 while running:
     for event in pygame.event.get():
@@ -44,10 +47,14 @@ while running:
                 player.setupArrow(dt, player.getAngle(event.pos[0], event.pos[1]))
                 mouseTicks = pygame.time.get_ticks()
                 mouseState = 0
+    if pygame.time.get_ticks() - bearTicks >= BEAR_SPAWN_TIME:
+        spawnBear(screen, gameMap)
+        bearTicks = pygame.time.get_ticks()
     screen.fill(BGCOLOR)
     gameMap.draw(screen)
     player.move()
     player.draw()
     player.arrowsExec()
+    bearsExec()
     pygame.display.flip()
     clock.tick(FPMS)
