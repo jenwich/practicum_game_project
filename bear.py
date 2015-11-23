@@ -6,6 +6,7 @@ bear_img = pygame.image.load("bear2.png")
 class Bear:
     width = 90
     height = 90
+    hp = 2
 
     def __init__(self, screen, gameMap, moveDir, speed):
         self.screen = screen
@@ -61,6 +62,11 @@ class Bear:
         px, py = player.getXY()
         pw, ph = player.getSize()
         return ((x-w/2 >= px-pw/2) and (x-w/2 <= px+pw/2)) or ((x+w/2 >= px-pw/2) and (x+w/2 <= px+pw/2))
+
+    def hitted(self):
+        self.hp = self.hp - 1
+        if self.hp == 0:
+            self.discard = 1
 
 def spawnBear(screen, gameMap):
     r1 = random.randint(1, 2)

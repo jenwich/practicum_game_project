@@ -102,7 +102,7 @@ class Player:
             for arrow in arrows:
                 if arrow.isHitBear(bear):
                     arrow.discard = 1
-                    bear.discard = 1
+                    bear.hitted()
         for bear in bears:
             if bear.isDiscarded():
                 bears.remove(bear)
