@@ -1,6 +1,8 @@
 import pygame, math
 from arrow import Arrow
 
+player_img = pygame.image.load("human.png")
+
 class Player:
     def __init__(self, screen, gameMap):
         self.screen = screen
@@ -57,7 +59,11 @@ class Player:
             self.currentDir = moveDir
 
     def draw(self):
-        pygame.draw.rect(self.screen, (225, 0, 0), self.rect)
+        # pygame.draw.rect(self.screen, (225, 0, 0), self.rect)
+        img_scaled = pygame.transform.scale(player_img, (self.width, self.height))
+        if self.currentDir == 2:
+            img_scaled = pygame.transform.flip(img_scaled, 1, 0)
+        self.screen.blit(img_scaled, self.rect)
 
     def calculateU(self, t):
         if t < 200:
@@ -90,3 +96,5 @@ class Player:
         for bear in bears:
             if bear.isHit(self):
                 pass
+
+    # def arrowHisBear(self)

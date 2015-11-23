@@ -1,10 +1,11 @@
 import pygame, random
 
 bears = []
+bear_img = pygame.image.load("bear.png")
 
 class Bear:
-    width = 20
-    height = 50
+    width = 40
+    height = 90
 
     def __init__(self, screen, gameMap, moveDir, speed):
         self.screen = screen
@@ -42,7 +43,11 @@ class Bear:
         return self.discard
 
     def draw(self):
-        pygame.draw.rect(self.screen, (0, 0, 255), self.rect)
+        # pygame.draw.rect(self.screen, (0, 0, 255), self.rect)
+        img_scaled = pygame.transform.scale(bear_img, (self.width, self.height))
+        if self.moveDir == 1:
+            img_scaled = pygame.transform.flip(img_scaled, 1, 0)
+        self.screen.blit(img_scaled, self.rect)
 
     def isHit(self, player):
         x, y = int(self.x), self.y
