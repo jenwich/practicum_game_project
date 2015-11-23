@@ -1,7 +1,8 @@
 import pygame, math
 from arrow import Arrow
 
-player_img = pygame.image.load("human.png")
+player_img = pygame.image.load("Archer.png")
+arrows = []
 
 class Player:
     def __init__(self, screen, gameMap):
@@ -12,7 +13,6 @@ class Player:
         self.moveDir = 0
         self.currentDir = 1
         self.speed = 2
-        self.arrows = []
 
     def set(self, x, width, height):
         self.x = x
@@ -61,7 +61,7 @@ class Player:
     def draw(self):
         # pygame.draw.rect(self.screen, (225, 0, 0), self.rect)
         img_scaled = pygame.transform.scale(player_img, (self.width, self.height))
-        if self.currentDir == 2:
+        if self.currentDir == 1:
             img_scaled = pygame.transform.flip(img_scaled, 1, 0)
         self.screen.blit(img_scaled, self.rect)
 
@@ -83,18 +83,29 @@ class Player:
             startX = self.x + self.width / 2
             ux = ux * -1
         arrow = Arrow(self.screen, self.gameMap, startX, self.y - self.height/2, ux, uy)
-        self.arrows.append(arrow)
+        arrows.append(arrow)
 
     def arrowsExec(self):
-        for arrow in self.arrows:
+        for arrow in arrows:
             arrow.move()
             arrow.draw()
             if arrow.isDiscarded():
-                self.arrows.remove(arrow)
+                arrows.remove(arrow)
 
     def hitBear(self, bears):
         for bear in bears:
-            if bear.isHit(self):
+            if bear.isHitPlayer(self):
                 pass
 
-    # def arrowHisBear(self)
+    def arrowHitBear(self, bears):
+        for bear in bears:
+            for arrow in arrows:
+                if arrow.isHitBear(bear):
+                    arrow.discard = 1
+                    bear.discard = 1
+        for bear in bears:
+            if bear.isDiscarded():
+                bears.remove(bear)
+        for arrow in arrows:
+            if arrow.isDiscarded():
+                arrows.remove(arrow)

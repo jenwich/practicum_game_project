@@ -1,5 +1,7 @@
 import pygame
 
+arrow_img = pygame.image.load("Arrow.png")
+
 class Arrow:
     G = 0.2
 
@@ -8,8 +10,8 @@ class Arrow:
         self.screenWidth = screen.get_width()
         self.screenHeight = screen.get_height()
         self.gameMap = gameMap
-        self.width = 6
-        self.height = 3
+        self.width = 30
+        self.height = 15
         self.ux = ux
         self.uy = uy
         self.xi = self.x = x
@@ -44,4 +46,18 @@ class Arrow:
             self.y = y
 
     def draw(self):
-        pygame.draw.rect(self.screen, (255, 180, 0), self.rect)
+        # pygame.draw.rect(self.screen, (255, 180, 0), self.rect)
+        img_scaled = pygame.transform.scale(arrow_img, (self.width, self.height))
+        if self.ux > 0:
+            img_scaled = pygame.transform.flip(img_scaled, 1, 0)
+        self.screen.blit(img_scaled, self.rect)
+
+    def isHitBear(self, bear):
+        x, y = int(self.x), self.y
+        w, h = self.width, self.height
+        px, py = bear.getXY()
+        pw, ph = bear.getSize()
+        if self.ux > 0:
+            return x-w/2 >= px-pw/2 and x-2/w <= px+pw/2 and y >= py-ph and y <= py
+        else:
+            return x+w/2 >= px-pw/2 and x+w/2 <= px+pw/2 and y >= py-ph and y <= py

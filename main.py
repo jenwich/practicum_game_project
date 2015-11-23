@@ -8,8 +8,8 @@ SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
 FPMS = 100
 BGCOLOR = (0, 125, 255)
-PLAYER_WIDTH = 20
-PLAYER_HEIGHT = 50
+PLAYER_WIDTH = 75
+PLAYER_HEIGHT = 100
 PLAYER_START_POS = SCREEN_WIDTH / 2
 RELOAD_TIME = 250
 BEAR_SPAWN_TIME = 2000
@@ -56,6 +56,7 @@ while running:
     player.draw()
     player.arrowsExec()
     player.hitBear(bears)
+    player.arrowHitBear(bears)
     bearsExec()
     pygame.display.flip()
     clock.tick(FPMS)
