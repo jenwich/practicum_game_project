@@ -55,6 +55,7 @@ while running:
     player.move()
     player.draw()
     player.arrowsExec()
+    player.hitBear(bears)
     bearsExec()
     pygame.display.flip()
     clock.tick(FPMS)

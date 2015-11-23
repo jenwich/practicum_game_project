@@ -19,6 +19,12 @@ class Player:
         self.height = height
         self.rect = pygame.Rect(self.x - self.width/2, self.y - self.height, width, height)
 
+    def getXY(self):
+        return (self.x, self.y)
+
+    def getSize(self):
+        return (self.width, self.height)
+
     def getAngle(self, x, y):
         mx = self.x
         my = self.y - self.height/2
@@ -79,3 +85,8 @@ class Player:
             arrow.draw()
             if arrow.isDiscarded():
                 self.arrows.remove(arrow)
+
+    def hitBear(self, bears):
+        for bear in bears:
+            if bear.isHit(self):
+                pass

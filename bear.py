@@ -44,6 +44,13 @@ class Bear:
     def draw(self):
         pygame.draw.rect(self.screen, (0, 0, 255), self.rect)
 
+    def isHit(self, player):
+        x, y = int(self.x), self.y
+        w, h = self.width, self.height
+        px, py = player.getXY()
+        pw, ph = player.getSize()
+        return ((x-w/2 >= px-pw/2) and (x-w/2 <= px+pw/2)) or ((x+w/2 >= px-pw/2) and (x+w/2 <= px+pw/2))
+
 def spawnBear(screen, gameMap):
     r1 = random.randint(1, 2)
     r2 = random.randint(1, 3)
@@ -56,4 +63,3 @@ def bearsExec():
         bear.draw()
         if bear.isDiscarded():
             bears.remove(bear)
-            print len(bears)
