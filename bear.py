@@ -6,7 +6,7 @@ bear_img = pygame.image.load("bear2.png")
 class Bear:
     width = 90
     height = 90
-    hp = 2
+    hp = 1
 
     def __init__(self, screen, gameMap, moveDir, speed):
         self.screen = screen
