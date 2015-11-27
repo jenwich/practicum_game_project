@@ -95,7 +95,7 @@ class Player:
     def hitBear(self, bears):
         for bear in bears:
             if bear.isHitPlayer(self):
-                print "Game over"
+                pass # print "Game over"
 
     def arrowHitBear(self, bears):
         for bear in bears:

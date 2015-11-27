@@ -2,7 +2,9 @@ from practicum import McuBoard
 
 RQ_SET_LED    = 0
 RQ_GET_SWITCH = 1
-RQ_GET_LIGHT  = 2
+RQ_GET_LIGHT1  = 2
+RQ_GET_LIGHT2  = 3
+RQ_GET_LIGHT3  = 4
 
 ####################################
 class PeriBoard(McuBoard):
@@ -36,9 +38,18 @@ class PeriBoard(McuBoard):
         return bool(x[0])
 
     ################################
-    def getLight(self):
+    def getLight(self, i):
         '''
         Return the current reading of light sensor on peripheral board
         '''
-        x = self.usbRead(request=RQ_GET_LIGHT, length=2)
-        return x[1]*256 + x[0]
+        result = 0
+        if i == 0:
+            x = self.usbRead(request=RQ_GET_LIGHT1, length=2)
+            result = x[1]*256 + x[0]
+        elif i == 1:
+            x = self.usbRead(request=RQ_GET_LIGHT2, length=2)
+            result = x[1]*256 + x[0]
+        elif i == 2:
+            x = self.usbRead(request=RQ_GET_LIGHT3, length=2)
+            result = x[1]*256 + x[0]
+        return result
