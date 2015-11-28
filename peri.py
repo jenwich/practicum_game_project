@@ -5,6 +5,7 @@ RQ_GET_SWITCH = 1
 RQ_GET_LIGHT1  = 2
 RQ_GET_LIGHT2  = 3
 RQ_GET_LIGHT3  = 4
+RQ_GET_SOUND  = 5
 
 ####################################
 class PeriBoard(McuBoard):
@@ -53,3 +54,7 @@ class PeriBoard(McuBoard):
             x = self.usbRead(request=RQ_GET_LIGHT3, length=2)
             result = x[1]*256 + x[0]
         return result
+
+    def getSound(self):
+        x = self.usbRead(request=RQ_GET_SOUND, length=2)
+        return x[1]*256 + x[0]

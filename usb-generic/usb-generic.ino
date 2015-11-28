@@ -5,13 +5,14 @@
 #define RQ_GET_LIGHT1  2
 #define RQ_GET_LIGHT2  3
 #define RQ_GET_LIGHT3  4
+#define RQ_GET_SOUND  5
 
 //////////////////////////////////////////////////////////////////////
 usbMsgLen_t usbFunctionSetup(uint8_t data[8])
 {
   usbRequest_t *rq = (usbRequest_t*)data;
   static uint8_t switch_state;
-  static uint16_t ldr_value1, ldr_value2, ldr_value3;
+  static uint16_t ldr_value1, ldr_value2, ldr_value3, sound_value;
 
   if (rq->bRequest == RQ_SET_LED)
   {
@@ -62,6 +63,13 @@ usbMsgLen_t usbFunctionSetup(uint8_t data[8])
     usbMsgPtr = (uint8_t*) &ldr_value3;
     return sizeof(ldr_value3);
   }
+  
+  else if (rq->bRequest == RQ_GET_SOUND)
+  {
+    sound_value = analogRead(PIN_PC3);
+    usbMsgPtr = (uint8_t*) &sound_value;
+    return sizeof(sound_value);
+  }
 
 
   return 0;   /* nothing to do; return no data back to host */
@@ -73,6 +81,7 @@ void setup()
     pinMode(PIN_PC0,INPUT);
     pinMode(PIN_PC1,INPUT);
     pinMode(PIN_PC2,INPUT);
+    pinMode(PIN_PC3,INPUT);
     pinMode(PIN_PB5,INPUT_PULLUP);
     pinMode(PIN_PB0,OUTPUT);
     pinMode(PIN_PB2,OUTPUT);

@@ -69,9 +69,9 @@ class Bear:
             self.discard = 1
 
 def spawnBear(screen, gameMap):
-    r1 = random.randint(1, 2)
-    r2 = random.randint(1, 3)
-    bear = Bear(screen, gameMap, r1, r2)
+    moveDir = random.randint(1, 2)
+    speed = random.randint(0, 2)
+    bear = Bear(screen, gameMap, moveDir, speed)
     bears.append(bear)
 
 def bearsExec():

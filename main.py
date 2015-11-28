@@ -1,6 +1,6 @@
 import pygame, math
 from gamemap import Map
-from player import Player
+from player import *
 from bear import *
 from practicum import findDevices
 from peri import PeriBoard
@@ -41,7 +41,6 @@ PLAYER_WIDTH = 75
 PLAYER_HEIGHT = 100
 PLAYER_START_POS = SCREEN_WIDTH / 2
 RELOAD_TIME = 250
-BEAR_SPAWN_TIME = 2000
 
 mode = 2 # 0 = exit, 1 = welcome, 2 = play
 pygame.init()
@@ -55,12 +54,18 @@ def play():
     player = Player(screen, gameMap)
     player.set(PLAYER_START_POS, PLAYER_WIDTH, PLAYER_HEIGHT)
     running = 1
+    bearSpawnTime = 2000
     mouseState = 0
     mouseTicks = 0
     bearTicks = 0
     angle = 0
     angleTicks = 0
-    angleTextLabel = None
+    angleText = pygame.font.Font(None, 28)
+    angleTextLabel = angleText.render(str(0), 1, (0, 0, 0))
+    scoreText = pygame.font.Font(None, 28)
+    scoreTextLabel = scoreText.render(str(0), 1, (0, 0, 0))
+    bearText = pygame.font.Font(None, 28)
+    bearTextLabel = bearText.render(str(0), 1, (0, 0, 0))
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -93,12 +98,12 @@ def play():
             led_left1 = board.getLight(0)
             led_left2 = board.getLight(1)
             led_right = board.getLight(2)
-            angleText = pygame.font.Font(None, 36)
+            sound = board.getSound()
             if led_right > maxLight[2]:
                 led_right = maxLight[2]
             elif led_right < minLight[2]:
                 led_right = minLight[2]
-            angle = (math.pi/2)-(math.pi * (led_right - minLight[2]))/(2 * (maxLight[2] - minLight[2]))
+            angle = 0.1*(math.pi * (led_right - minLight[2]))/(2 * (maxLight[2] - minLight[2])) + 0.9*angle
             switch = board.getSwitch()
             if led_left1 < 0.5*(maxLight[0]-minLight[0])+minLight[0]:
                 player.setDir(1)
@@ -114,22 +119,29 @@ def play():
             elif switch == False:
                 dt = pygame.time.get_ticks() - mouseTicks
                 if mouseState == 1:
-                    print angle*180/math.pi
+                    # print angle*180/math.pi
                     player.setupArrow(dt, angle)
                     mouseTicks = pygame.time.get_ticks()
                     mouseState = 0
+            if sound < 200:
+                print counter
 
-        if pygame.time.get_ticks() - bearTicks >= BEAR_SPAWN_TIME:
+        if counter["latestBear"] >= 5:
+            counter["latestBear"] = 0
+            bearSpawnTime = int(bearSpawnTime * 0.9)
+        if pygame.time.get_ticks() - bearTicks >= bearSpawnTime:
             spawnBear(screen, gameMap)
             bearTicks = pygame.time.get_ticks()
         screen.fill(BGCOLOR)
-        if angleTextLabel == None:
-            angleTextLabel = angleText.render(str(angle*180/math.pi), 1, (0, 0, 0))
-        if pygame.time.get_ticks() - angleTicks > 100:
-            angleTextLabel = angleText.render(str(angle*180/math.pi), 1, (0, 0, 0))
-            angleTicks = pygame.time.get_ticks()
-        screen.blit(angleTextLabel, (10, 10))
         gameMap.draw(screen)
+        if pygame.time.get_ticks() - angleTicks > 100:
+            angleTextLabel = angleText.render("Angle: "+str(int(angle*180/math.pi)) , 1, (0, 0, 0))
+            scoreTextLabel = scoreText.render("Score: "+str(counter["score"]) , 1, (0, 0, 0))
+            bearTextLabel = bearText.render("Bear: "+str(counter["allBear"]) , 1, (0, 0, 0))
+            angleTicks = pygame.time.get_ticks()
+        screen.blit(angleTextLabel, player.getXY())
+        screen.blit(scoreTextLabel, (SCREEN_WIDTH - 150, 10))
+        screen.blit(bearTextLabel, (SCREEN_WIDTH - 150, 40))
         player.move()
         player.draw()
         player.arrowsExec()

@@ -3,6 +3,7 @@ from arrow import Arrow
 
 player_img = pygame.image.load("Archer.png")
 arrows = []
+counter = { "score": 0, "allBear": 0, "latestBear": 0 }
 
 class Player:
     def __init__(self, screen, gameMap):
@@ -105,6 +106,13 @@ class Player:
                     bear.hitted()
         for bear in bears:
             if bear.isDiscarded():
+                global counter
+                counter["allBear"] += 1
+                counter["latestBear"] += 1
+                bearPos = bear.getXY()
+                dist = math.sqrt((self.x-bearPos[0])**2 + (self.y-bearPos[1])**2)
+                sc = int(10 + dist * 0.1)
+                counter["score"] += sc
                 bears.remove(bear)
         for arrow in arrows:
             if arrow.isDiscarded():
