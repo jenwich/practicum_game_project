@@ -1,9 +1,11 @@
 import pygame, math
 from arrow import Arrow
 
+pygame.mixer.init()
 player_img = pygame.image.load("Archer.png")
 arrows = []
 counter = { "score": 0, "allBear": 0, "latestBear": 0, "comboBear": 0 }
+bear_sound = pygame.mixer.Sound("sound/bear.wav")
 
 class Player:
     def __init__(self, screen, gameMap):
@@ -87,7 +89,7 @@ class Player:
         if self.currentDir == 2:
             startX = self.x + self.width / 2
             ux = ux * -1
-        arrow = Arrow(self.screen, self.gameMap, startX, self.y - self.height/2, ux, uy)
+        arrow = Arrow(self.screen, self.gameMap, startX, self.y - self.height*0.75, ux, uy)
         arrows.append(arrow)
 
     def arrowsExec(self):
@@ -118,6 +120,7 @@ class Player:
                 dist = math.sqrt((self.x-bearPos[0])**2 + (self.y-bearPos[1])**2)
                 sc = int(10 + dist * 0.1)
                 counter["score"] += sc
+                bear_sound.play()
                 bears.remove(bear)
         for arrow in arrows:
             if arrow.isDiscarded():

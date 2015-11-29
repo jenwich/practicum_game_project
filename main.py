@@ -12,7 +12,7 @@ TITLE = "Let's hunt the little bears!"
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
 FPMS = 100
-BGCOLOR = (0, 125, 255)
+BGCOLOR = (135, 206, 250)
 PLAYER_WIDTH = 75
 PLAYER_HEIGHT = 100
 PLAYER_START_POS = SCREEN_WIDTH / 2
@@ -48,10 +48,16 @@ if EVENT_MODE == 1:
 
 displayMode = 1 # 0 = exit, 1 = welcome, 2 = play, 3 = game over
 pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(TITLE)
 clock = pygame.time.Clock()
-
+pygame.mixer.music.load("sound/BackgroundSong.wav")
+pygame.mixer.music.set_volume(0.4)
+shoot_sound = pygame.mixer.Sound("sound/shoot.wav")
+ultimate_sound = pygame.mixer.Sound("sound/ultimate.wav")
+gameOverSwitchCount = 0
+gameOverSwitchState = 0
 
 ####################  NEW GAME SETUP  #####################
 
@@ -67,6 +73,7 @@ def newGame():
     clearArrows()
     clearBears()
     resetCounter()
+    pygame.mixer.music.play(-1)
 
 #########################  PLAY  ##########################
 
@@ -171,6 +178,7 @@ def play():
                     if mouseState == 1:
                         if dt > RELOAD_TIME:
                             player.setupArrow(dt, angle)
+                            shoot_sound.play()
                         mouseTicks = pygame.time.get_ticks()
                         mouseState = 0
 
@@ -179,6 +187,7 @@ def play():
                     board.setLed(2, 1)
                     if sound < 200:
                         counter["comboBear"] = 0
+                        ultimate_sound.play()
                         clearBears()
                 else:
                     board.setLed(2, 0)
@@ -187,7 +196,7 @@ def play():
             if pygame.time.get_ticks() - angleTicks > 100:
                 angleTextLabel = angleText.render("Angle: "+str(int(angle*180/math.pi)) , 1, (0, 0, 0))
                 scoreTextLabel = scoreText.render("Score: "+str(counter["score"]) , 1, (0, 0, 0))
-                bearTextLabel = bearText.render("Bear: "+str(counter["allBear"]) , 1, (0, 0, 0))
+                bearTextLabel = bearText.render("Bears: "+str(counter["allBear"]) , 1, (0, 0, 0))
                 angleTicks = pygame.time.get_ticks()
 
             # Blit texts to screen
@@ -224,6 +233,7 @@ def play():
 
         ## Game over Screen
         elif displayMode == 3:
+            pygame.mixer.music.stop()
             gameOverText = pygame.font.Font(None, 48)
             scoreText = pygame.font.Font(None, 36)
             gameOverTextLabel = gameOverText.render("Game Over", 1, (0, 0, 0))
@@ -231,12 +241,20 @@ def play():
             screen.blit(gameOverTextLabel, (SCREEN_WIDTH/2 - 80, SCREEN_HEIGHT/2 - 150))
             screen.blit(scoreTextLabel, (SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2 - 100))
             if EVENT_MODE == 1:
+                global gameOverSwitchCount, gameOverSwitchState
                 sw = board.getSwitch()
                 if sw == 1:
+                    gameOverSwitchState = 1
+                elif sw == 0:
+                    if gameOverSwitchState == 1:
+                        gameOverSwitchCount += 1
+                        gameOverSwitchState = 0
+                if gameOverSwitchCount == 5:
+                    gameOverSwitchCount = 0
                     newGame()
                     displayMode = 2
 
-        pygame.display.flip()
+        pygame.display.update()
         clock.tick(FPMS)
 
 play()

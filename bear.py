@@ -1,11 +1,11 @@
 import pygame, random
 
 bears = []
-bear_img = pygame.image.load("bear2.png")
+bear_img = pygame.image.load("bear.png")
 
 class Bear:
-    width = 90
-    height = 90
+    width = 64
+    height = 136
     hp = 1
 
     def __init__(self, screen, gameMap, moveDir, speed):

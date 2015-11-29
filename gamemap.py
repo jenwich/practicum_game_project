@@ -7,7 +7,7 @@ class Map:
     HIGH_RATE = 0.9
     LOW_RATE = 0.4
     LINE_COLOR = (0, 125, 0)
-    POLYGON_COLOR = (0, 200, 0)
+    POLYGON_COLOR = (34, 139, 34)
 
     def __init__(self, width, height):
         self.width = width
