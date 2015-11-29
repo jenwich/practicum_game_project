@@ -80,3 +80,6 @@ def bearsExec():
         bear.draw()
         if bear.isDiscarded():
             bears.remove(bear)
+
+def clearBears():
+    del bears[:]

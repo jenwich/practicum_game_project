@@ -3,7 +3,7 @@ from arrow import Arrow
 
 player_img = pygame.image.load("Archer.png")
 arrows = []
-counter = { "score": 0, "allBear": 0, "latestBear": 0 }
+counter = { "score": 0, "allBear": 0, "latestBear": 0, "comboBear": 0 }
 
 class Player:
     def __init__(self, screen, gameMap):
@@ -14,6 +14,7 @@ class Player:
         self.moveDir = 0
         self.currentDir = 1
         self.speed = 2
+        self.dead = 0
 
     def set(self, x, width, height):
         self.x = x
@@ -41,6 +42,9 @@ class Player:
     def isOut(self, x):
         return x - self.width/2 <= 0 or x + self.width/2 >= self.screenWidth
 
+    def isDead(self):
+        return self.dead
+
     def move(self):
         x = self.x
         if self.moveDir == 1:
@@ -67,8 +71,8 @@ class Player:
         self.screen.blit(img_scaled, self.rect)
 
     def calculateU(self, t):
-        if t < 200:
-            return 2
+        if t < 300:
+            return 3
         elif t < 1500:
             return t / 100
         else:
@@ -96,7 +100,7 @@ class Player:
     def hitBear(self, bears):
         for bear in bears:
             if bear.isHitPlayer(self):
-                pass # print "Game over"
+                self.dead = 1
 
     def arrowHitBear(self, bears):
         for bear in bears:
@@ -109,6 +113,7 @@ class Player:
                 global counter
                 counter["allBear"] += 1
                 counter["latestBear"] += 1
+                counter["comboBear"] += 1
                 bearPos = bear.getXY()
                 dist = math.sqrt((self.x-bearPos[0])**2 + (self.y-bearPos[1])**2)
                 sc = int(10 + dist * 0.1)
@@ -117,3 +122,12 @@ class Player:
         for arrow in arrows:
             if arrow.isDiscarded():
                 arrows.remove(arrow)
+
+def clearArrows():
+    del arrows[:]
+
+def resetCounter():
+    counter["score"] = 0
+    counter["allBear"] = 0
+    counter["latestBear"] = 0
+    counter["comboBear"] = 0
