@@ -42,7 +42,6 @@ if EVENT_MODE == 1:
                 maxLight[i] = light
             if light < minLight[i]:
                 minLight[i] = light
-    # print (minLight[0], maxLight[0]), (minLight[1], maxLight[1]), (minLight[2], maxLight[2])
 
 ###########################################################
 
@@ -52,10 +51,10 @@ pygame.mixer.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption(TITLE)
 clock = pygame.time.Clock()
-pygame.mixer.music.load("sound/BackgroundSong.wav")
+pygame.mixer.music.load("src/sounds/BackgroundSong.wav")
 pygame.mixer.music.set_volume(0.4)
-shoot_sound = pygame.mixer.Sound("sound/shoot.wav")
-ultimate_sound = pygame.mixer.Sound("sound/ultimate.wav")
+shoot_sound = pygame.mixer.Sound("src/sounds/Shoot.wav")
+ultimate_sound = pygame.mixer.Sound("src/sounds/Wind.wav")
 gameOverSwitchCount = 0
 gameOverSwitchState = 0
 

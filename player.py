@@ -2,10 +2,10 @@ import pygame, math
 from arrow import Arrow
 
 pygame.mixer.init()
-player_img = pygame.image.load("Archer.png")
+player_img = pygame.image.load("src/images/Player.png")
 arrows = []
 counter = { "score": 0, "allBear": 0, "latestBear": 0, "comboBear": 0 }
-bear_sound = pygame.mixer.Sound("sound/bear.wav")
+bear_sound = pygame.mixer.Sound("src/sounds/Bear.wav")
 
 class Player:
     def __init__(self, screen, gameMap):

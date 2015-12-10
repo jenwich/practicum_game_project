@@ -1,7 +1,7 @@
 import pygame, random
 
 bears = []
-bear_img = pygame.image.load("bear.png")
+bear_img = pygame.image.load("src/images/Bear.png")
 
 class Bear:
     width = 64

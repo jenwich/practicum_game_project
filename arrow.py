@@ -1,6 +1,6 @@
 import pygame
 
-arrow_img = pygame.image.load("Arrow.png")
+arrow_img = pygame.image.load("src/images/Arrow.png")
 
 class Arrow:
     G = 0.2
